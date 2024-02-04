@@ -1,0 +1,30 @@
+name: CodeVault
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  upload_solution:
+    runs-on: ubuntu-latest
+
+    env:
+      $(grep -v '^#' .env | xargs -0)
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Install Dependencies
+        run: |
+          pip install requests
+
+      - name: Run Upload Script
+        run: python .github/scripts/upload_solution.py
